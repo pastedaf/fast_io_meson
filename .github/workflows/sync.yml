@@ -28,11 +28,12 @@ jobs:
           rm -rf upstream
           git clone --depth 1 "${UPSTREAM_URL}" upstream
 
-          # Sync everything except our CI and meson.build
+          # Sync everything except our CI, meson.build, and the source dir itself
           rsync -a --delete \
             --exclude '.git' \
             --exclude '.github' \
             --exclude 'meson.build' \
+            --exclude 'upstream' \
             upstream/ .
 
           UPSTREAM_SHA=$(git -C upstream rev-parse --short HEAD || echo unknown)
