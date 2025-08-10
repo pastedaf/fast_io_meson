@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #if defined(_MSC_VER) && !defined(__clang__)
 #pragma warning(push)
@@ -423,7 +423,11 @@ inline void wincrt_set_buffer_curr_ptr_impl(FILE *__restrict fpp,
 #endif
 											void *ptr) noexcept
 {
+#if defined(_MSC_VER) || defined(_UCRT)
 	ucrt_iobuf *fp{reinterpret_cast<ucrt_iobuf *>(fpp)};
+#else
+	FILE* fp{fpp};
+#endif
 	fp->_cnt -= static_cast<::std::int_least32_t>(
 		static_cast<::std::uint_least32_t>(static_cast<::std::size_t>(reinterpret_cast<char *>(ptr) - fp->_ptr)));
 	fp->_ptr = reinterpret_cast<char *>(ptr);
